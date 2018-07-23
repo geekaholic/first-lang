@@ -1,0 +1,65 @@
+Let always = TRUE
+
+If always Then
+  Print "Hello World"
+End
+
+Let age = 35
+Var cost_of_living
+Const PI = 3.141519
+
+# Can annotate numbers for readability
+Let cost_of_living = 3,000.dollars * 12.months
+
+# Conditional
+If cost_of_living > 100,000.dollars Then
+  Print "That's insane! Time to move!"
+ElseIf cost_of_living >= 50,000.dollars Then
+  Print "Pretty expensive"
+Else
+  Print "Good job!"
+End
+
+Select cost_of_living
+  When 48,000.dollars
+    Print "Insane!"
+  When 36,000.dollars
+    Print "Expensive!"
+  Else
+    Print "Good Job!"
+End
+
+# Loops
+For i = 1 To 100 Step 2
+  Print i
+End
+
+Let j = 10
+While j > 1
+  # Redefining Let doesn't matter but might be more readable
+  Print "Counting down #{j}"
+  Let j = j - 1
+End
+
+Do
+  j = j + 1
+  Print j
+While j <= 10
+
+# Lists / Arrays
+Let @fruits = ["Apple", "Orange", "Grape"]
+
+# Dictionaries / Hashes
+Let %fruit_prices = {
+  "Apple" : 0.99.dollars,
+  "Orange" : 1.25.dollars
+}
+
+Foreach fruit In @fruits
+  Print fruit
+End
+
+Foreach fruit, price In %fruit_prices
+  Print "#{fruit} costs #{price}"
+End
+
