@@ -17,7 +17,7 @@ syn keyword firstlangDisplay Print
 syn keyword firstlangKeyword Var Const Let End Self Singleton
 syn keyword firstlangStatement Return Continue Break New
 syn keyword firstlangConditional If Else Elseif ElseIf Then Select When
-syn keyword firstlangLoop  While Do For Foreach
+syn keyword firstlangLoop  While Do For To Step Foreach
 syn match   firstlangFunctionName  "[a-zA-Z_0-9]*\s*("
 syn keyword firstlangFunction Function Method nextgroup=firstlangFunctionName skipwhite
 syn keyword firstlangClass  Class Inherit Implements
