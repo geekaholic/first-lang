@@ -77,12 +77,14 @@ class Translator
   end
 
   def self.tr_for(line)
-    # For i = 1 To 100 Step 2
-    r = Regexp.compile("For\s+(#{REGEXES[:scalar]})\s*=\s*([0-9]+)\s*To\s*([0-9]+)")
+    r1 = Regexp.compile("For\s+([^=]*)\s*=\s*(.+)\s+To\s+(.+)")
+    r2 = Regexp.compile("For\s+([^=]*)\s*=\s*(.+)\s+To\s+(.+)\s+Step\s+(.+)")
     # for i in (1..100)
-    line.gsub!(r, 'for \1 in (\2..\3)')
-    # for i in (1..100).step(2)
-    line.gsub!(/\s*Step\s*([0-9]+)/, '.step(\1)')
+    if line.match(r2)
+      line.gsub!(r2, 'for \1 in (\2..\3).step(\4)')
+    elsif line.match(r1)
+      line.gsub!(r1, 'for \1 in (\2..\3)')
+    end
     line
   end
 
