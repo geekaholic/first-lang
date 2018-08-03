@@ -20,6 +20,8 @@ class Translator
       'If': 'if',
       'In': 'in',
       'Let': '',
+      'Mod': '%',
+      'Or': '||',
       'Print': 'puts',
       'Return': 'return',
       'Select': 'case',
