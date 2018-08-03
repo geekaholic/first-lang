@@ -6,6 +6,25 @@ class Translator
     scalar: '[a-z][a-zA-Z_]*',
   }
 
+  def self.monkeypatch
+    <<-HEREDOC
+class Array
+  methods = {
+    Push: :push,
+    Pop: :pop,
+    Insert: :unshift,
+    Delete: :shift
+  }
+  methods.keys.each do |method|
+    alias_method method, methods[method]
+    define_singleton_method method do |arr, val|
+      arr.send(methods[method], val)
+    end
+  end
+end
+    HEREDOC
+  end
+
   def self.translate(line)
     @fl2rb ||= {
       'Const': '',
@@ -132,5 +151,6 @@ source.map! do |line|
   line = Translator.translate(line)
 end
 
+source.unshift(Translator.monkeypatch)
 save_compiled(source)
 execute() 

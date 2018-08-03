@@ -1,0 +1,16 @@
+# By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms.
+
+Function fibonacci_generator(max)
+  Let @sequence = [1, 2]
+  Let next_fibonacci = 3
+
+  While next_fibonacci < max
+    Array.Push(@sequence, next_fibonacci)
+    Let last_index = @sequence.length - 1
+    Let next_fibonacci = @sequence[last_index] + @sequence[last_index - 1]
+  End
+
+  Return @sequence
+End
+
+Print fibonacci_generator(10)

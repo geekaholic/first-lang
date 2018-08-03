@@ -1,0 +1,18 @@
+# Find the sum of all the multiples of 3 or 5 below 1000
+# https://projecteuler.net/problem=1
+
+Function sum_of_multiples(max)
+  # Returns sum of multiples of 3 or 5
+  Let sum = 0
+  For i = 1 To max - 1
+    If (i Mod 3 == 0) Or (i Mod 5 == 0) Then
+      sum = sum + i
+    End
+  End
+  Return sum
+End
+
+Let max = 1000
+Let sum = sum_of_multiples(max)
+
+Print "The sum of multiples 3 or 5 up to #{max} is #{sum}"
