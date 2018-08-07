@@ -1,4 +1,5 @@
-# By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms.
+# By considering terms in the Fibonacci sequence whose values don't exceed four million, find the sum of the even-valued terms.
+# https://projecteuler.net/problem=2
 
 Function fibonacci_generator(max)
   Let @sequence = [1, 2]
@@ -13,4 +14,11 @@ Function fibonacci_generator(max)
   Return @sequence
 End
 
-Print fibonacci_generator(10)
+Let @sequence = fibonacci_generator(4,000,000)
+Let sum = 0
+
+Foreach fib In @sequence
+  sum = sum + fib If Math.Even?(fib)
+End
+
+Println sum

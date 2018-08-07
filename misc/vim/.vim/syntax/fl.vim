@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language: FirstLang
 " Maintainer: Bud Siddhisena <bud@geekaholic.org>
-" Latest Revision: Aug 5 2018
+" Latest Revision: Aug 7 2018
 
 if exists("b:current_syntax")
   finish
@@ -13,12 +13,13 @@ syn region  firstlangString       start=+"+ end=+"+ end=+$+
 
 syn match   firstlangComment "#.*"
 syn match   firstlangComment "//.*"
-syn keyword firstlangDisplay Print
+syn keyword firstlangDisplay Print Println
 syn keyword firstlangKeyword Const End Let Mod Self Singleton Var
 syn keyword firstlangStatement Break Continue New Return
 syn keyword firstlangConditional Else Elseif ElseIf If Or Select Then When
 syn keyword firstlangLoop  Do For Foreach In Step To While
-syn match   firstlangOperator "\(Array\)\.[A-Z][A-Za-z]\+"
+syn match   firstlangOperator "Array\.[A-Z][A-Za-z?]\+"
+syn match   firstlangOperator "Math\.[A-Z][A-Za-z?]\+"
 syn match   firstlangFunctionName  "[a-z][A-Za-z_0-9]*("
 syn keyword firstlangFunction Function Method nextgroup=firstlangFunctionName skipwhite
 syn keyword firstlangClass  Class Inherit Implements

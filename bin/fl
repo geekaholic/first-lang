@@ -13,12 +13,33 @@ class Array
     Push: :push,
     Pop: :pop,
     Insert: :unshift,
-    Delete: :shift
+    Delete: :shift,
+    Length: :length
   }
   methods.keys.each do |method|
     alias_method method, methods[method]
     define_singleton_method method do |arr, val|
       arr.send(methods[method], val)
+    end
+  end
+end
+
+module Math
+  class << self
+    def Ceiling(x)
+      x.ceil
+    end
+
+    def Sqrt(x)
+      ::Math::sqrt(x)
+    end
+
+    def Even?(x)
+      x.even?
+    end
+
+    def Odd?(x)
+      x.odd?
     end
   end
 end
@@ -41,7 +62,8 @@ end
       'Let': '',
       'Mod': '%',
       'Or': '||',
-      'Print': 'puts',
+      'Print': 'print',
+      'Println': 'puts',
       'Return': 'return',
       'Select': 'case',
       'Then': '',
