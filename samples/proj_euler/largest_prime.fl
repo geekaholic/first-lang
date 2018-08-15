@@ -1,0 +1,52 @@
+# Largest prime factor of the number 600851475143 
+# https://projecteuler.net/problem=3
+
+Function prime_generator(max)
+  # Based on [Sieve of Eratosthenes algorithm](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes)
+  Let @candidates = []
+
+  For i = 1 To Math.Ceiling(Math.Sqrt(max))
+    @candidates[i] = TRUE
+  End
+
+  For j = 2 To @candidates.LastIndex
+    Let k = 2
+    While (j * k) < @candidates.LastIndex
+      # Not a prime
+      @candidates[j*k] = FALSE
+      k = k + 1
+    End
+  End
+
+  Let @primes = []
+  For i = 1 To @candidates.LastIndex
+    @primes.Push(i) If @candidates[i]
+  End
+  Return @primes
+End
+
+Function prime_factors(num)
+  Let @factors = []
+  Let @primes = prime_generator(num)
+
+  Foreach p In @primes.ReverseSort
+    If num Mod p == 0 Then
+      @factors.Push(p)
+      num = num / p
+    End
+  End
+
+  Return @factors.Sort
+End
+
+Function print_primes(@primes)
+  For i = 1 To @primes.LastIndex
+    Print "#{@primes[i]}, "
+  End
+End
+
+Let num = 600851475143
+Let @prime_factors = prime_factors(num)
+Print "Largest prime factors for #{num} are :"
+print_primes(@prime_factors)
+Println
