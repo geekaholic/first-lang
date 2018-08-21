@@ -3,7 +3,7 @@
 
 Function prime_generator(max)
   # Based on [Sieve of Eratosthenes algorithm](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes)
-  Let @candidates = []
+  Var @candidates
 
   For i = 1 To Math.Ceiling(Math.Sqrt(max))
     @candidates[i] = TRUE
@@ -18,7 +18,7 @@ Function prime_generator(max)
     End
   End
 
-  Let @primes = []
+  Var @primes
   For i = 1 To @candidates.LastIndex
     @primes.Push(i) If @candidates[i]
   End
@@ -26,7 +26,7 @@ Function prime_generator(max)
 End
 
 Function prime_factors(num)
-  Let @factors = []
+  Var @factors
   Let @primes = prime_generator(num)
 
   Foreach p In @primes.ReverseSort

@@ -55,7 +55,7 @@ end
     HEREDOC
   end
 
-  def self.translate(line)
+  def self.translate(line, line_orig)
     @fl2rb ||= {
       'Const': '',
       'Do': :tr_do,
@@ -86,7 +86,7 @@ end
     tokenize(line).each do |token|
       token = token.to_sym
       if @fl2rb[token].is_a?(Symbol) && self.respond_to?(@fl2rb[token])
-        line = send(@fl2rb[token], line)
+        line = send(@fl2rb[token], line, line_orig)
       else
         line.gsub!(/\b#{token}\b/, @fl2rb[token])
       end
@@ -121,7 +121,7 @@ end
     line.split(/\s+/).select{ |l| @fl2rb.keys.include?(l.to_sym) }.uniq
   end
 
-  def self.tr_for(line)
+  def self.tr_for(line, line_orig)
     r1 = Regexp.compile("For\s+([^=]*)\s*=\s*(.+)\s+To\s+(.+)")
     r2 = Regexp.compile("For\s+([^=]*)\s*=\s*(.+)\s+To\s+(.+)\s+Step\s+(.+)")
     # for i in (1..100)
@@ -133,16 +133,28 @@ end
     line
   end
 
-  def self.tr_var(line)
+  def self.tr_var(line, line_orig)
     # Var foo, bar
     # Var foo = bar
     line.chomp!
     line.gsub!(/\bVar \b/, '')
     vars = line.split(/[,]/)
-    vars.map{ |var| "#{var}=nil"}.join("\n")
+    vars.map do |var|
+      var.strip!
+      # Check what type of var and set empty_val
+      m = line_orig.match(/([@%]?)#{var}/)
+      empty_val = 'nil'
+      case(m[1])
+        when "@"
+          empty_val = '[]'
+        when "%"
+          empty_val = '{}'
+      end
+      "#{var}=#{empty_val}"
+    end.join("\n")
   end
 
-  def self.tr_do(line)
+  def self.tr_do(line, line_orig)
     @in_do ||= []
     # Track inside do block
     @in_do.push(true)
@@ -150,7 +162,7 @@ end
     line
   end
 
-  def self.tr_while(line)
+  def self.tr_while(line, line_orig)
     @in_do ||= []
     if @in_do.pop
       # While -> end while
@@ -179,8 +191,10 @@ source = File.readlines(source_in)
 
 source.map! do |line|
   next if line.match(/^\s*$/)
+  # Keep track of original line to refer to lost data such as after deannotation
+  line_orig = line
   line = Translator.deannotate(line)
-  line = Translator.translate(line)
+  line = Translator.translate(line, line_orig)
 end
 
 source.unshift(Translator.monkeypatch)
