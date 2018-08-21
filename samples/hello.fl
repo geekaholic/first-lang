@@ -1,0 +1,76 @@
+Let always = TRUE
+
+If always Then
+  Println "Hello World"
+End
+
+Let age = 35
+Var cost_of_living
+Const PI = 3.141519
+
+# Can annotate numbers for readability
+Let cost_of_living = 3,000.dollars * 12.months
+
+# Conditional
+If cost_of_living > 100,000.dollars Then
+  Println "That's insane! Time to move!"
+ElseIf cost_of_living >= 50,000.dollars Then
+  Println "Pretty expensive"
+Else
+  Println "Good job!"
+End
+
+Select cost_of_living
+  When 48,000.dollars
+    Println "Insane!"
+  When 36,000.dollars
+    Println "Expensive!"
+  Else
+    Println "Good Job!"
+End
+
+# Loops
+For i = 1 To 100 Step 2
+  Println i
+End
+
+Let j = 10
+While j > 1
+  # Redefining Let doesn't matter but might be more readable
+  Println "Counting down #{j}"
+  Let j = j - 1
+End
+
+Do
+  j = j + 1
+  Println j
+While j <= 10
+
+# Lists / Arrays
+Let @fruits = ["Apple", "Orange", "Grape"]
+
+# Dictionaries / Hashes
+Let %fruit_prices = {
+  "Apple" : 0.99.dollars,
+  "Orange" : 1.25.dollars
+}
+
+Foreach fruit In @fruits
+  Println fruit
+End
+
+Foreach fruit, price In %fruit_prices
+  Println "#{fruit} costs #{price}"
+End
+
+# Functions
+Function calculate_bmi(height, weight)
+  Let bmi = (weight / height) * 703
+  Return bmi
+End
+
+Let h = 5.ft
+Let w = 200.lb
+bmi = calculate_bmi(h, w)
+Println "Watch your weight!" If bmi > 25
+

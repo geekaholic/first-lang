@@ -1,0 +1,202 @@
+#!/usr/bin/env ruby
+require 'pry'
+
+class Translator
+  REGEXES = {
+    scalar: '[a-z][a-zA-Z_]*',
+  }
+
+  def self.monkeypatch
+    <<-HEREDOC
+class Array
+  methods = {
+    Push: :push,
+    Pop: :pop,
+    Insert: :unshift,
+    Delete: :shift,
+    Length: :length,
+    Sort: :sort,
+    ReverseSort: :reverse
+  }
+  methods.keys.each do |method|
+    alias_method method, methods[method]
+    define_singleton_method method do |arr, val|
+      arr.send(methods[method], val)
+    end
+  end
+
+  def LastIndex
+    self.length - 1
+  end
+  def self.LastIndex(arr)
+    arr.LastIndex
+  end
+end
+
+module Math
+  class << self
+    def Ceiling(x)
+      x.ceil
+    end
+
+    def Sqrt(x)
+      ::Math::sqrt(x)
+    end
+
+    def Even?(x)
+      x.even?
+    end
+
+    def Odd?(x)
+      x.odd?
+    end
+  end
+end
+    HEREDOC
+  end
+
+  def self.translate(line, line_orig)
+    @fl2rb ||= {
+      'Const': '',
+      'Do': :tr_do,
+      'Else': 'else',
+      'Elseif': 'elsif',
+      'ElseIf': 'elsif',
+      'End': 'end',
+      'FALSE': 'false',
+      'For': :tr_for,
+      'Foreach': 'for',
+      'Function': 'def',
+      'If': 'if',
+      'In': 'in',
+      'Let': '',
+      'Mod': '%',
+      'Or': '||',
+      'Print': 'print',
+      'Println': 'puts',
+      'Return': 'return',
+      'Select': 'case',
+      'Then': '',
+      'TRUE': 'true',
+      'Var': :tr_var,
+      'When': 'when',
+      'While': :tr_while,
+    }
+
+    tokenize(line).each do |token|
+      token = token.to_sym
+      if @fl2rb[token].is_a?(Symbol) && self.respond_to?(@fl2rb[token])
+        line = send(@fl2rb[token], line, line_orig)
+      else
+        line.gsub!(/\b#{token}\b/, @fl2rb[token])
+      end
+    end
+    line
+  end
+
+  def self.deannotate(line)
+    # 1,000.50.dollars, -> 1,000.50,
+    line = line.gsub(/((?:,?[1-9]{1,3},?)+(?:[0-9]{0,3}(?:.[0-9]+)?)+)(?:.[a-z]+)/,'\1')
+
+    # 1,000.50 -> 1000.50
+    re = /([1-9]{1,3}),([0-9]{3})/
+    while(line.match(re))
+      line.gsub!(re, '\1\2')
+    end
+    re = /([0-9]+),([0-9]{3})/
+    while line.match(re)
+      line.gsub!(re, '\1\2')
+    end
+
+    # @arr -> arr, %hash -> hash
+    r = Regexp.compile("[@%](#{REGEXES[:scalar]})")
+    line.gsub!(r, '\1')
+    # "Foo" : "bar" -> "Foo": "bar"
+    line.gsub!(/("[a-zA-Z_]+")\s*/,'\1')
+    line
+  end
+
+  private
+  def self.tokenize(line)
+    line.split(/\s+/).select{ |l| @fl2rb.keys.include?(l.to_sym) }.uniq
+  end
+
+  def self.tr_for(line, line_orig)
+    r1 = Regexp.compile("For\s+([^=]*)\s*=\s*(.+)\s+To\s+(.+)")
+    r2 = Regexp.compile("For\s+([^=]*)\s*=\s*(.+)\s+To\s+(.+)\s+Step\s+(.+)")
+    # for i in (1..100)
+    if line.match(r2)
+      line.gsub!(r2, 'for \1 in (\2).step(\3, \4)')
+    elsif line.match(r1)
+      line.gsub!(r1, 'for \1 in (\2..\3)')
+    end
+    line
+  end
+
+  def self.tr_var(line, line_orig)
+    # Var foo, bar
+    # Var foo = bar
+    line.chomp!
+    line.gsub!(/\bVar \b/, '')
+    vars = line.split(/[,]/)
+    vars.map do |var|
+      var.strip!
+      # Check what type of var and set empty_val
+      m = line_orig.match(/([@%]?)#{var}/)
+      empty_val = 'nil'
+      case(m[1])
+        when "@"
+          empty_val = '[]'
+        when "%"
+          empty_val = '{}'
+      end
+      "#{var}=#{empty_val}"
+    end.join("\n")
+  end
+
+  def self.tr_do(line, line_orig)
+    @in_do ||= []
+    # Track inside do block
+    @in_do.push(true)
+    line.gsub!(/Do/, 'begin')
+    line
+  end
+
+  def self.tr_while(line, line_orig)
+    @in_do ||= []
+    if @in_do.pop
+      # While -> end while
+      line.gsub!(/While\s+/, 'end while ')
+    else
+      # While -> while
+      line.gsub!(/While\s+/, 'while ')
+    end
+    line
+  end
+end
+
+def save_compiled(source)
+  File.open('/tmp/source.rb', 'w') do |f|
+    f.puts source
+  end
+end
+
+def execute
+  exec('ruby', '/tmp/source.rb')
+end
+
+puts "Usage: fl <source.fl>" unless ARGV.length == 1
+source_in = ARGV.first
+source = File.readlines(source_in)
+
+source.map! do |line|
+  next if line.match(/^\s*$/)
+  # Keep track of original line to refer to lost data such as after deannotation
+  line_orig = line
+  line = Translator.deannotate(line)
+  line = Translator.translate(line, line_orig)
+end
+
+source.unshift(Translator.monkeypatch)
+save_compiled(source)
+execute() 
