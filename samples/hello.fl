@@ -1,7 +1,7 @@
 Let always = TRUE
 
 If always Then
-  Print "Hello World"
+  Println "Hello World"
 End
 
 Let age = 35
@@ -13,37 +13,37 @@ Let cost_of_living = 3,000.dollars * 12.months
 
 # Conditional
 If cost_of_living > 100,000.dollars Then
-  Print "That's insane! Time to move!"
+  Println "That's insane! Time to move!"
 ElseIf cost_of_living >= 50,000.dollars Then
-  Print "Pretty expensive"
+  Println "Pretty expensive"
 Else
-  Print "Good job!"
+  Println "Good job!"
 End
 
 Select cost_of_living
   When 48,000.dollars
-    Print "Insane!"
+    Println "Insane!"
   When 36,000.dollars
-    Print "Expensive!"
+    Println "Expensive!"
   Else
-    Print "Good Job!"
+    Println "Good Job!"
 End
 
 # Loops
 For i = 1 To 100 Step 2
-  Print i
+  Println i
 End
 
 Let j = 10
 While j > 1
   # Redefining Let doesn't matter but might be more readable
-  Print "Counting down #{j}"
+  Println "Counting down #{j}"
   Let j = j - 1
 End
 
 Do
   j = j + 1
-  Print j
+  Println j
 While j <= 10
 
 # Lists / Arrays
@@ -56,11 +56,11 @@ Let %fruit_prices = {
 }
 
 Foreach fruit In @fruits
-  Print fruit
+  Println fruit
 End
 
 Foreach fruit, price In %fruit_prices
-  Print "#{fruit} costs #{price}"
+  Println "#{fruit} costs #{price}"
 End
 
 # Functions
@@ -72,5 +72,5 @@ End
 Let h = 5.ft
 Let w = 200.lb
 bmi = calculate_bmi(h, w)
-Print "Watch your weight!" If bmi > 25
+Println "Watch your weight!" If bmi > 25
 

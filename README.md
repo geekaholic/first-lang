@@ -32,37 +32,37 @@ Let cost_of_living = 3,000.dollars * 12.months
 
 # Conditional
 If cost_of_living > 100,000.dollars Then
-  Print "That's insane! Time to move!"
+  Println "That's insane! Time to move!"
 ElseIf cost_of_living >= 50,000.dollars Then
-  Print "Pretty expensive"
+  Println "Pretty expensive"
 Else
-  Print "Good job!"
+  Println "Good job!"
 End
 
 Select cost_of_living
   When >100,000
-    Print "Insane!"
+    Println "Insane!"
   When >=50,000
-    Print "Expensive!"
+    Println "Expensive!"
   Else
-    Print "Good Job!"
+    Println "Good Job!"
 End
 
 # Loops
 For i = 1 To 100 Step 2
-  Print i
+  Println i
 End
 
 Let j = 100
 While j > 1
   # Redefining Let doesn't matter but might be more readable
   Let j = j - 2
-  Print "Counting down #{j}"
+  Println "Counting down #{j}"
 End
 
 Do
   j = j + 1
-  Print j
+  Println j
 While j <= 100
 
 # Lists / Arrays
@@ -75,25 +75,25 @@ Let %fruit_prices = {
 }
 
 Foreach fruit In @fruits
-  Print fruit
+  Println fruit
 End
 
 @fruits.Foreach fruit
-  Print fruit
+  Println fruit
 End
 
 Foreach fruit, price In %fruit_prices
-  Print "#{fruit} costs #{price}"
+  Println "#{fruit} costs #{price}"
 End
 
 %fruit_prices.Foreach fruit, price
-  Print "#{fruit} costs #{price}"
+  Println "#{fruit} costs #{price}"
 End
 
 # Functions
 Let h = 5.ft, w = 200.lb
 Let bmi = calculate_bmi(weight = w, height = h)
-Print "Watch your weight!" If bmi > 25
+Println "Watch your weight!" If bmi > 25
 
 Function calculate_bmi(height, weight)
   Let bmi = (weight / height) * 703
