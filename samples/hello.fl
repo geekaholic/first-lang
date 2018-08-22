@@ -41,10 +41,20 @@ While j > 1
   Let j = j - 1
 End
 
-Do
+Println "Counting from 1 to 10 using Loop/End"
+Let z = 0
+Loop
+  z = z + 1
+  Println z
+  Break If z > 9
+End
+
+Println "Counting from 1 to 10 using Loop/While"
+Let j = 0
+Loop
   j = j + 1
   Println j
-While j <= 10
+While j < 10
 
 # Lists / Arrays
 Let @fruits = ["Apple", "Orange", "Grape"]
