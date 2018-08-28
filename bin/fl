@@ -57,12 +57,13 @@ end
 
   def self.translate(line, line_orig)
     @fl2rb ||= {
+      'Break': 'break',
       'Const': '',
-      'Do': :tr_do,
+      'Continue': 'next',
       'Else': 'else',
       'Elseif': 'elsif',
       'ElseIf': 'elsif',
-      'End': 'end',
+      'End': :tr_end,
       'FALSE': 'false',
       'For': :tr_for,
       'Foreach': 'for',
@@ -70,6 +71,7 @@ end
       'If': 'if',
       'In': 'in',
       'Let': '',
+      'Loop': :tr_loop,
       'Mod': '%',
       'Or': '||',
       'Print': 'print',
@@ -154,11 +156,11 @@ end
     end.join("\n")
   end
 
-  def self.tr_do(line, line_orig)
+  def self.tr_loop(line, line_orig)
     @in_do ||= []
     # Track inside do block
     @in_do.push(true)
-    line.gsub!(/Do/, 'begin')
+    line.gsub!(/Loop/, 'begin')
     line
   end
 
@@ -172,6 +174,16 @@ end
       line.gsub!(/While\s+/, 'while ')
     end
     line
+  end
+
+  def self.tr_end(line, line_orig)
+    @in_do ||= []
+    repl = 'end'
+    if @in_do.pop
+      # Loop / End block is an infinite loop
+      repl = 'end while true'
+    end
+    line.gsub!(/\bEnd\b/, repl)
   end
 end
 

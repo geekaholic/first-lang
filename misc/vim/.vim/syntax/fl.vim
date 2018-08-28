@@ -17,7 +17,7 @@ syn keyword firstlangDisplay Print Println
 syn keyword firstlangKeyword Const End Let Mod Self Singleton Var
 syn keyword firstlangStatement Break Continue New Return
 syn keyword firstlangConditional Else Elseif ElseIf If Or Select Then When
-syn keyword firstlangLoop  Do For Foreach In Step To While
+syn keyword firstlangLoop  Loop For Foreach In Step To While
 syn match   firstlangOperator "Array\.[A-Z][A-Za-z?]\+"
 syn match   firstlangOperator "Math\.[A-Z][A-Za-z?]\+"
 syn match   firstlangFunctionName  "[a-z][A-Za-z_0-9]*("
