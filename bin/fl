@@ -70,7 +70,7 @@ end
       'Function': 'def',
       'If': 'if',
       'In': 'in',
-      'Let': '',
+      'Let': :tr_let,
       'Loop': :tr_loop,
       'Mod': '%',
       'Or': '||',
@@ -98,7 +98,7 @@ end
 
   def self.deannotate(line)
     # 1,000.50.dollars, -> 1,000.50,
-    line = line.gsub(/((?:,?[1-9]{1,3},?)+(?:[0-9]{0,3}(?:.[0-9]+)?)+)(?:.[a-z]+)/,'\1')
+    line = line.gsub(/((?:,?[1-9]{1,3},?)+(?:[0-9]{0,3}(?:.[0-9]+)?)+)(?:\.[a-z]+)/,'\1')
 
     # 1,000.50 -> 1000.50
     re = /([1-9]{1,3}),([0-9]{3})/
@@ -120,7 +120,7 @@ end
 
   private
   def self.tokenize(line)
-    line.split(/\s+/).select{ |l| @fl2rb.keys.include?(l.to_sym) }.uniq
+    line.split(/[\s\)\(]+/).select{ |l| @fl2rb.keys.include?(l.to_sym) }.uniq
   end
 
   def self.tr_for(line, line_orig)
@@ -135,25 +135,39 @@ end
     line
   end
 
+  def self.tr_let(line, line_orig)
+    line.chomp!
+    line.gsub!(/\bLet \b/, '')
+    tr_var(line, line_orig)
+  end
+
   def self.tr_var(line, line_orig)
     # Var foo, bar
     # Var foo = bar
     line.chomp!
     line.gsub!(/\bVar \b/, '')
-    vars = line.split(/[,]/)
+    vars = line.split(/\s*,\s*/)
+    join_by = "\n"
     vars.map do |var|
       var.strip!
-      # Check what type of var and set empty_val
-      m = line_orig.match(/([@%]?)#{var}/)
+      # Check what type of var and set empty_val, override join_by
+      m = line_orig.match(/([@%]?)#{Regexp.escape(var)}/)
       empty_val = 'nil'
-      case(m[1])
-        when "@"
-          empty_val = '[]'
-        when "%"
-          empty_val = '{}'
+      m && case(m[1])
+            when "@"
+              empty_val = '[]'
+              join_by = ",\n"
+            when "%"
+              empty_val = '{}'
+              join_by = ",\n"
+           end
+      if var.match(/^#{REGEXES[:scalar]}$/)
+        "#{var}=#{empty_val}"
+      else
+        # Likely foo = bar
+        var
       end
-      "#{var}=#{empty_val}"
-    end.join("\n")
+    end.join(join_by)
   end
 
   def self.tr_loop(line, line_orig)

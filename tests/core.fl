@@ -1,0 +1,37 @@
+# Unit test core functionality of First-Lang
+
+Function assert_equal(actual, expected)
+  If actual == expected Then
+    Println "Passed."
+  Else
+    Println "assert_equal failed! Expected #{expected} but got #{actual}"
+  End
+End
+
+Function test_If()
+  # Test equality
+  Let a = 1, b = 1, c = 2
+  Var result
+
+  result = FALSE
+  If a == b Then
+    result = TRUE
+  End
+  assert_equal(result, TRUE)
+
+  result = FALSE
+  If c > b Then
+    result = TRUE
+  End
+  assert_equal(result, TRUE)
+
+  result = FALSE
+  If a > b Then
+    result = FALSE
+  Else
+    result = TRUE
+  End
+  assert_equal(result, TRUE)
+End
+test_If()
+
