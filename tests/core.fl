@@ -1,4 +1,4 @@
-# Unit test core functionality of First-Lang
+# Tests core functionality of First-Lang
 
 Function assert_equal(actual, expected)
   If actual == expected Then
@@ -8,7 +8,20 @@ Function assert_equal(actual, expected)
   End
 End
 
-Function test_If()
+Function test_Deannotation()
+  Println "Running test_Deannotation()..."
+
+  Let amount = 3,125.dollars
+  assert_equal(amount, 3125)
+
+  Let amount = 5.08.ft
+  assert_equal(amount, 5.08)
+End
+test_Deannotation()
+
+Function test_Conditional()
+  Println "Running test_Conditional()..."
+
   # Test equality
   Let a = 1, b = 1, c = 2
   Var result
@@ -25,13 +38,42 @@ Function test_If()
   End
   assert_equal(result, TRUE)
 
-  result = FALSE
+  # Test Else
   If a > b Then
     result = FALSE
   Else
     result = TRUE
   End
   assert_equal(result, TRUE)
+
+  # Test Elseif
+  If a == 2 Then
+    result = FALSE
+  Elseif a == 1 Then
+    result = TRUE
+  Else
+    result = FALSE
+  End
+  assert_equal(result, TRUE)
+
+  # Test Select / When
+  result = FALSE
+  Select a
+    When 1
+      result = TRUE
+    When 2
+      result = FALSE
+  End
+  assert_equal(result, TRUE)
+
+  # Test Select / Else
+  Select a
+    When 2
+      result = FALSE
+    Else
+      result = TRUE
+  End
+  assert_equal(result, TRUE)
 End
-test_If()
+test_Conditional()
 
