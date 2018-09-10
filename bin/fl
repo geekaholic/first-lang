@@ -120,6 +120,8 @@ end
 
   private
   def self.tokenize(line)
+    # Ignore comment lines
+    return [] if line.match(/^\s*#/)
     line.split(/[\s\)\(]+/).select{ |l| @fl2rb.keys.include?(l.to_sym) }.uniq
   end
 

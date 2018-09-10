@@ -77,3 +77,23 @@ Function test_Conditional()
 End
 test_Conditional()
 
+Function test_Iterations()
+  Println "Running test_Iterations()..."
+
+  # Simple infite Loop with Break condition
+  Let z = 0
+  Loop
+    z = z + 1
+    Break If z==5
+  End
+  assert_equal(z, 5)
+
+  # Loop / While
+  Let z = 0
+  Loop
+    z = z + 1
+  While z < 4
+  assert_equal(z, 4)
+
+End
+test_Iterations()
