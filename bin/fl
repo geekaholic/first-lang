@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby
-require 'pry'
-
 class Translator
   REGEXES = {
     scalar: '[a-z][a-zA-Z_]*',
@@ -219,18 +217,23 @@ def execute
   exec('ruby', '/tmp/source.rb')
 end
 
-puts "Usage: fl <source.fl>" unless ARGV.length == 1
-source_in = ARGV.first
-source = File.readlines(source_in)
+if ARGV.length != 1
+  puts 'Usage: fl [ source.fl | - ]'
+  puts 'Use filename as - for STDIN'
+  exit 1
+end
+ARGV.shift if ARGV.first == '-'
 
-source.map! do |line|
+source = []
+ARGF.each do |line|
   next if line.match(/^\s*$/)
   # Keep track of original line to refer to lost data such as after deannotation
   line_orig = line
   line = Translator.deannotate(line)
   line = Translator.translate(line, line_orig)
+  source << line
 end
 
 source.unshift(Translator.monkeypatch)
 save_compiled(source)
-execute() 
+execute()

@@ -1,8 +1,10 @@
 # First Lang Project
 
-`First Lang` is a programming language designed for newcomers. Currently it is only an early draft and there is only a WIP Ruby based interpreter implementation. For basic syntax highlighting for VIM checkout the `misc` directory.
+`First Lang` is a programming language designed for newcomers. Currently it is only an early draft and there is a basic [Ruby based interpreter](./bin/fl) implemented. For basic syntax highlighting for VIM checkout the `misc` directory.
 
 ## First Lang by Examples
+
+Below is an example of how the language syntax will look. Not all of the language features are implemented so please take a look at [./samples](./samples) and [./tests](./tests) directories for what is currently supported.
 
 ```
 # Data types
@@ -33,7 +35,7 @@ Let cost_of_living = 3,000.dollars * 12.months
 # Conditional
 If cost_of_living > 100,000.dollars Then
   Println "That's insane! Time to move!"
-ElseIf cost_of_living >= 50,000.dollars Then
+Elseif cost_of_living >= 50,000.dollars Then
   Println "Pretty expensive"
 Else
   Println "Good job!"
@@ -60,7 +62,14 @@ While j > 1
   Println "Counting down #{j}"
 End
 
-Do
+# Infinite Loop
+Let z = 0
+Loop
+  z = z + 1
+  Println z
+End
+
+Loop
   j = j + 1
   Println j
 While j <= 100
@@ -174,5 +183,11 @@ End
 There is an experimental interpreter runtime which requires you to have `Ruby` preinstalled.
 
 ```
-$ ./bin/fl samples/hello.fl
+$ ./bin/fl ./samples/hello.fl
+```
+
+To execute from STDIN
+
+```
+$ cat ./samples/hello.fl | ./bin/fl -
 ```
