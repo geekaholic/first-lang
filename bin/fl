@@ -33,6 +33,12 @@ class Array
   end
 end
 
+class Symbol
+  def ==(y)
+    self.to_s == y
+  end
+end
+
 module Math
   class << self
     def Ceiling(x)
