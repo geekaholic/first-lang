@@ -95,5 +95,31 @@ Function test_Iterations()
   While z < 4
   assert_equal(z, 4)
 
+  # For / Foreach loops
+  Let z = 0
+  For i = 1 To 5
+    z = i
+  End
+  assert_equal(z, 5)
+
+  Let z = 5
+  For i = 5 To 1 Step -1
+    z = i
+  End
+  assert_equal(z, 1)
+
+  Let z = 0
+  Foreach i In [5, 4, 3]
+    z = i
+  End
+  assert_equal(z, 3)
+
+  Let x = '', y = 0
+  Foreach k, v In { "a": 1, "b": 2 }
+    x = k
+    y = v
+  End
+  assert_equal(x, 'b')
+  assert_equal(y, 2)
 End
 test_Iterations()
