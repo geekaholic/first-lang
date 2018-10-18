@@ -200,7 +200,7 @@ $ docker-compose run --rm first-lang /bin/bash
 
 Or try using [Play-with-docker](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/geekaholic/first-lang/docker-support/docker-compose.yml), which would download and build the container on the cloud. Once everything has settled attach to the running container.
 
-[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/geekaholic/first-lang/docker-support/docker-compose.yml)
+[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/geekaholic/first-lang/master/docker-compose.yml)
 
 ```
 $ docker attach $(docker ps -q)
