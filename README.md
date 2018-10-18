@@ -191,3 +191,20 @@ To execute from STDIN
 ```
 $ cat ./samples/hello.fl | ./bin/fl -
 ```
+
+Alternately you can use Docker to get a shell with first-lang preinstalled in a container.
+
+```
+$ docker-compose run --rm first-lang /bin/bash
+```
+
+Or try using [Play-with-docker](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/geekaholic/first-lang/docker-support/docker-compose.yml), which would download and build the container on the cloud. Once everything has settled attach to the running container.
+
+[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/geekaholic/first-lang/docker-support/docker-compose.yml)
+
+```
+$ docker attach $(docker ps -q)
+root@77851e85544f:/first-lang/samples# fl hello.fl
+root@77851e85544f:/first-lang/samples# vi hello.fl
+```
+

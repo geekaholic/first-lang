@@ -1,0 +1,7 @@
+version: "3"
+services:
+  first-lang:
+    image: geekaholic/first-lang
+    command: /bin/bash
+    stdin_open: true
+    tty: true
