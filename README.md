@@ -1,8 +1,8 @@
-# First Lang Project
+# First-Lang Project
 
-`First Lang` is a programming language designed for newcomers. Currently it is only an early draft and there is a basic [Ruby based interpreter](./bin/fl) implemented. For basic syntax highlighting for VIM checkout the `misc` directory.
+`First-Lang` is a programming language designed for newcomers. Currently it is only an early draft and there is a basic [Ruby based interpreter](./bin/fl) implemented. For basic syntax highlighting for VIM checkout the `misc` directory.
 
-## First Lang by Examples
+## First-Lang by Examples
 
 Below is an example of how the language syntax will look. Not all of the language features are implemented so please take a look at [./samples](./samples) and [./tests](./tests) directories for what is currently supported.
 
@@ -178,7 +178,7 @@ Mixin ~Loggable
   End
 End
 ```
-## Experimenting with First Lang interpreter
+## Experimenting with First-Lang interpreter
 
 There is an experimental interpreter runtime which requires you to have `Ruby` preinstalled.
 
@@ -208,3 +208,12 @@ root@77851e85544f:/first-lang/samples# fl hello.fl
 root@77851e85544f:/first-lang/samples# vi hello.fl
 ```
 
+### Running First-Lang on iOS!
+
+It's now possible to play with First-Lang on iOS thanks to the amazing work being done by the folks at [iSH](https://github.com/tbodt/ish). As iSH is still in development and not yet officially available via the AppStore, you will need to head over to [iSH github](https://github.com/tbodt/ish) and either build via source or install via TestFlight. Once installed launch iSH and install packages `ruby, git and vim` to get started.
+
+```
+$ apk add ruby git vim
+$ git clone https://github.com/geekaholic/first-lang.git
+
+```
